@@ -1,0 +1,38 @@
+﻿<f:WindowBase x:Class="prbd_1819_g10.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:prbd_1819_g10"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             xmlns:p="clr-namespace:prbd_1819_g10.Properties"
+             mc:Ignorable="d" d:DesignWidth="800" Height="651.546">
+    <Grid>
+        <Menu VerticalAlignment="Top" RenderTransformOrigin="0.503,-2.907" Height="24">
+            <MenuItem Header="{x:Static p:Resources.MainView_File}">
+
+            </MenuItem>
+            <MenuItem Header="{x:Static p:Resources.MainView_Logout}" Command="{Binding LogOut}">
+            </MenuItem>
+        </Menu>
+        <TabControl x:Name="tabControl" Margin="10,29,10,10">
+            <TabItem x:Name="booksTab" Header="{x:Static p:Resources.MainView_Books}">
+                <ContentControl>
+                    <local:BooksView/>
+                </ContentControl>
+            </TabItem>
+            <TabItem x:Name="categoriesTab" Header="{x:Static p:Resources.MainView_Categories}">
+                <local:CategoriesView/>
+            </TabItem>
+            <TabItem x:Name="basketTab" Header="{x:Static p:Resources.MainView_Basket}">
+                <local:BasketView/>
+            </TabItem>
+            <TabItem x:Name="rentalsTab" Header="{x:Static p:Resources.MainView_Rentals}">
+                <local:RentalsView/>
+            </TabItem>
+            <TabItem x:Name="usersTab" Header="{x:Static p:Resources.MainView_Users}">
+                <local:UsersView/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</f:WindowBase>

@@ -1,0 +1,47 @@
+﻿<f:UserControlBase x:Class="prbd_1819_g10.RentalsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:prbd_1819_g10"
+             mc:Ignorable="d" 
+             xmlns:p="clr-namespace:prbd_1819_g10.Properties"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="root">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!--ROW1 DataGRID 1-->
+        <DataGrid Height="150" Margin="10" ItemsSource="{Binding Rentals}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedRental}">
+            <DataGrid.Columns >
+                <DataGridTextColumn Header="Rental Date" Binding="{Binding RentalDate}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="User" Binding="{Binding User.UserName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="#Items" Binding="{Binding NbItems}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="#Open" Binding="{Binding NumOpenItems}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+            <!-- Fill the rows -->
+        </DataGrid>
+        <!--ROW2 DataGRID 2-->
+        <DataGrid  Grid.Row="1"  ItemsSource="{Binding RentalItems}" AutoGenerateColumns="False" CanUserAddRows="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Book" Binding="{Binding RentalItem.TitleBook}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Return Date" Binding="{Binding RentalItem.ReturnDate}"  IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Actions" Width="100" Visibility="{Binding IsAdmin,ElementName=root, Converter={StaticResource BoolToVis}}">
+                    <DataGridTemplateColumn.CellTemplate >
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Width="100" Visibility="{Binding IsAdmin,ElementName=root, Converter={StaticResource BoolToVis}}">
+                                <Button x:Name="Return" Width="50" Command="{Binding Return,ElementName=root}" CommandParameter="{Binding}" Content="Return" Visibility="{Binding IsNotReturned, Converter={StaticResource BoolToVis}}"/>
+                                <Button x:Name="Cancel" Width="50" Command="{Binding Cancel,ElementName=root}" CommandParameter="{Binding}" Content="Cancel" Visibility="{Binding IsReturned, Converter={StaticResource BoolToVis}}"/>
+                                <Button Width="50" Command="{Binding Delete,ElementName=root}" CommandParameter="{Binding}">Delete</Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <!-- Fill the rows -->
+        </DataGrid>
+    </Grid>
+</f:UserControlBase>

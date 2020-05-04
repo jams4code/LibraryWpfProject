@@ -1,0 +1,126 @@
+﻿<f:UserControlBase x:Class="prbd_1819_g10.BookDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+    xmlns:wpf="http://schemas.microsoft.com/netfx/2007/xaml/presentation"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:local="clr-namespace:prbd_1819_g10"
+    xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+    xmlns:p="clr-namespace:prbd_1819_g10.Properties"
+    mc:Ignorable="d" 
+    d:DesignHeight="450"
+    x:Name="root" Width="835">
+    <UserControl.Resources>
+        <BitmapImage x:Key="UnknownBook" UriSource="/images/unknownbook.jpg"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--ROW n°1 - ISBN-->
+        <Label Content="{x:Static p:Resources.BookDetailView_Isbn}"/>
+        <f:ValidatedField Grid.Column="1" VerticalAlignment="Center" Margin="0,4,200,4">
+            <TextBox x:Name="txtIsbn" Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged}"
+                      IsEnabled="{Binding IsNotMemeber}"/>
+        </f:ValidatedField>
+
+        <!--ROW n°2 - TITLE-->
+        <Label Content="{x:Static p:Resources.BookDetailView_Title}" Grid.Row="1"/>
+        <f:ValidatedField Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0,4,200,4">
+            <TextBox x:Name="txtTitle" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsNotMemeber}"/>
+        </f:ValidatedField>
+
+        <!--ROW n°3 - AUTHOR-->
+        <Label Content="{x:Static p:Resources.BookDetailView_Author}" Grid.Row="2"/>
+        <f:ValidatedField Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,4,200,4">
+            <TextBox x:Name="txtAuthor" Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding IsNotMemeber}"/>
+        </f:ValidatedField>
+
+        <!--ROW n°4 - EDITOR-->
+        <Label Content="{x:Static p:Resources.BookDetailView_Editor}" Grid.Row="3"/>
+        <f:ValidatedField Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="0,4,200,4">
+            <TextBox x:Name="txtEditor" Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsNotMemeber}"/>
+        </f:ValidatedField>
+
+        <!--ROW n°5 - CATEGORIES-->
+        <Label Content="{x:Static p:Resources.BookDetailView_Category}" Grid.Row="4"/>
+        <!-- CheckBox -->
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="10,5,10,10">
+            <ItemsControl ItemsSource="{Binding CategoriesList}" IsEnabled="{Binding IsNotMemeber}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Cat.Name}" Padding="5 0" IsChecked="{Binding IsChecked}" Command="{Binding Check,ElementName=root}" CommandParameter="{Binding}" IsEnabled="{Binding IsNotMemeber}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <!--ROW n°6 - PICTURE-->
+        <Label Content="{x:Static p:Resources.BookDetailView_Picture}" Grid.Row="5"/>
+        <!-- INTERN GRID-->
+        <Grid Grid.Row="5" Grid.Column="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- IMAGE-->
+            <Image x:Name="img" Grid.Column="0" MinWidth="50" MaxWidth="250" MaxHeight="250" VerticalAlignment="Top"
+                   Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}"
+                   RenderOptions.BitmapScalingMode="Fant" Margin="0,5,5,0" Height="201"/>
+            <!-- Bouton LOAD & CLEAR -->
+            <StackPanel Margin="5" Grid.Column="1" HorizontalAlignment="Left">
+                <Button x:Name="btnLoad" Content="{x:Static p:Resources.BookDetailView_Load}" Width="75" VerticalAlignment="Top" Command="{Binding LoadImage}" Margin="0,0,0,5" IsEnabled="{Binding IsNotMemeber}"/>
+                <Button x:Name="btnClear" Content="{x:Static p:Resources.BookDetailView_Clear}" Width="75" VerticalAlignment="Top" Command="{Binding ClearImage}" Margin="0,0,0,5" IsEnabled="{Binding IsNotMemeber}"/>
+            </StackPanel>
+            <StackPanel x:Name="copies" Margin="10" Grid.Column="2" HorizontalAlignment="Right" Visibility="{Binding IsNotNew , Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Book Copies" TextWrapping="Wrap" FontSize="16" FontWeight="Bold" TextAlignment="Center"/>
+                <DataGrid  IsReadOnly="True" Height="175" Width="400" AutoGenerateColumns="False" ItemsSource="{Binding BookCopies}" IsEnabled="{Binding IsNotMemeber}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}"/>
+                        <DataGridTextColumn Header="Acquisition Date" Binding="{Binding AcquisitionDate}"/>
+                        <DataGridTextColumn Header="Rented by" Binding="{Binding NameRenter}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <WrapPanel Width="400" Margin="5" IsEnabled="{Binding IsNotMemeber}" >
+                    <Label Content="Date:"/>
+                    <xctk:DateTimePicker Format="FullDateTime" Width="auto" Value="{Binding AddCopiesDate}" IsEnabled="{Binding IsNotMemeber}"/>
+                    <Label Content="Qty:" Margin="5,0,0,0"/>
+                    <xctk:IntegerUpDown Name="myUpDownControl" DefaultValue="1" Minimum="1" Value="{Binding NbCopies}" IsEnabled="{Binding IsNotMemeber}"/>
+                    <Button x:Name="txtAddCopies" Content="Add" Command="{Binding AddCopies}" Width="50" Margin="10,0,0,0" IsEnabled="{Binding IsNotMemeber}"/>
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- ROW n°7 - Bouton CANCEL,SAVE & DELETE -->
+        <WrapPanel Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" IsEnabled="{Binding IsNotMemeber}">
+            <Button x:Name="btnCancel" Content="{x:Static p:Resources.BookDetailView_Cancel}" Command="{Binding Cancel}" Width="auto" Padding="5,1" IsEnabled="{Binding IsNotMemeber}"/>
+            <Button x:Name="btnSave" Content="{x:Static p:Resources.BookDetailView_Save}" Command="{Binding Save}" Width="auto" Margin="10,0,0,0" Padding="5,1" IsEnabled="{Binding IsNotMemeber}"/>
+            <Button x:Name="btnDelete" Content="{x:Static p:Resources.BookDetailView_Delete}" Command="{Binding Delete}" Width="auto" Margin="10,0,0,0" Padding="5,1" IsEnabled="{Binding IsNotMemeber}"/>
+        </WrapPanel>
+    </Grid>
+</f:UserControlBase>

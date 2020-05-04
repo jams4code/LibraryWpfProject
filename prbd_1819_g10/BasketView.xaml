@@ -1,0 +1,48 @@
+﻿<f:UserControlBase x:Class="prbd_1819_g10.BasketView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:prbd_1819_g10"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             xmlns:p="clr-namespace:prbd_1819_g10.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+                 x:Name="root">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- ROW n°1-->
+        <WrapPanel Visibility="{Binding IsAdmin,ElementName=root, Converter={StaticResource BoolToVis}}">
+        <Label Content="{x:Static p:Resources.BasketView_Label}" Margin="5,15,10,20"/>
+            <!-- Remplir la ComboBox-->
+            <ComboBox Width="75" Height="20" Margin="0,5,5,5" SelectedItem="{Binding SelectedUser}" ItemsSource="{Binding Users}" DisplayMemberPath="UserName" IsEditable ="false" Focusable ="{Binding IsAdmin}"/>
+        </WrapPanel>
+        <WrapPanel Visibility="{Binding IsNotAdmin,ElementName=root, Converter={StaticResource BoolToVis}}">
+            <Label Content="{x:Static p:Resources.BasketView_Label_User}" Margin="5,15,10,20"/>
+        </WrapPanel>
+        <!-- ROW n°2 DATAGRID-->
+        <DataGrid Grid.Row="1" Height="100" ItemsSource="{Binding Books}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static p:Resources.BasketView_HeaderColTitle}" Width="200" Binding="{Binding Title}"/>
+                <DataGridTextColumn Header="{x:Static p:Resources.BasketView_HeaderColAuthor}" Width="100" Binding="{Binding Author}"/>
+                <DataGridTemplateColumn Header="{x:Static p:Resources.BasketView_HeaderColActions}" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="50" Command="{Binding DeleteRental,ElementName=root}" CommandParameter="{Binding}">Delete</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <!-- Remplir ROW-->
+        </DataGrid>
+        <!-- ROW n°3-->
+        <WrapPanel Margin="5,20,5,5" Grid.Row="2">
+            <Button x:Name="btnConfirm" Content="{x:Static p:Resources.BasketView_Confirm}" Command="{Binding Confirm}" Width="auto" Padding="5,1"/>
+            <Button x:Name="btnClear" Content="{x:Static p:Resources.BasketView_Clear}" Command="{Binding Clear}" Width="auto" Margin="10,0,0,0" Padding="5,1"/>
+        </WrapPanel>
+    </Grid>
+</f:UserControlBase>
